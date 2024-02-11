@@ -5,6 +5,8 @@ const loadedCommands = new Array();
 const loadedCommandNames = new Set();
 const loadedCommandAliases = new Set();
 
+const loadFriends = new Set();
+
 function load_commands() {
     const commandsFolder = path.join(__dirname, '../../script/commands');
 
@@ -36,4 +38,11 @@ function load_commands() {
     });
 }
 
-module.exports = { load_commands, loadedCommands };
+async function load_friends({ api }) {
+    const friends = await api.getFriendsList();
+    friends.forEach(friend => {
+        loadFriends.add(friend);
+    });
+}
+
+module.exports = { load_commands, loadedCommands, loadFriends, load_friends };

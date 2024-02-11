@@ -1,5 +1,10 @@
 {
+    "prefix": "@",
     "admin": [
         "61556164448377"
-    ]
+    ],
+    "friend_only": true,
+    "group_thread": true,
+    "personal_thread": true,
+    "auto_accept": true
 }

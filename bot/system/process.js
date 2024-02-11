@@ -1,6 +1,6 @@
 const { join_event } = require("../event/join");
 const { left_event } = require("../event/left");
-const { loadedCommands } = require("./load");
+const { loadedCommands, loadFriends } = require("./load");
 
 function system_handler({ api, event }) {
     switch (event.type) {
@@ -14,6 +14,12 @@ function system_handler({ api, event }) {
             break;
 
         case "message":
+            if (true) {
+                const friend_status = Array.from(loadFriends).find(friend => {
+                    return (event.senderID === friend.userID);
+                });
+                if (!friend_status) return;
+            }
             const commandToRun = loadedCommands.find(command => {
                 return (
                     event.body.toLowerCase() === command.config.name ||
