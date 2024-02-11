@@ -1,0 +1,25 @@
+{
+  "name": "zero",
+  "version": "1.0.0",
+  "description": "Facebook Messenger Bot Unofficial",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FireFlyDeveloper/Zero.git"
+  },
+  "author": "Saludes, Kim Eduard",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/FireFlyDeveloper/Zero/issues"
+  },
+  "homepage": "https://github.com/FireFlyDeveloper/Zero#readme",
+  "dependencies": {
+    "@xaviabot/fca-unofficial": "github:XaviaTeam/fca-unofficial",
+    "cron": "^3.1.6",
+    "fca-project-orion": "^1.1.22",
+    "node-cron": "^3.0.3"
+  }
+}
