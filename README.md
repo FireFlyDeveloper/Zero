@@ -18,10 +18,9 @@ Zero is an open-source Facebook Messenger chatbot designed to provide a seamless
 
 ### Prerequisites
 
-- Node.js
+- Node.js v16
 - npm (Node Package Manager)
-- Facebook Developer Account
-- Facebook App with Messenger Integration
+- Facebook Account
 
 ### Installation
 
