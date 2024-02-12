@@ -54,7 +54,7 @@ Zero is an open-source Facebook Messenger chatbot designed to provide a seamless
     ```
 
 5. Set up your Facebook Account token and place it in `appstate.json` file.
-- To get appstate follow this [Instruction](https://github.com/c3cbot/c3c-fbstate.git)
+- To get appstate follow this [instruction](https://github.com/c3cbot/c3c-fbstate.git).
 
 **Note: Use a dummy Facebook account for development purposes to avoid the risk of the account being banned due to automated interactions with the Messenger API.**
 
