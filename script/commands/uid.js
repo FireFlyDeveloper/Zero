@@ -6,7 +6,7 @@ module.exports = {
         author: "Saludes, Kim Eduard",
         role: 0,
         countdown: 5,
-        description: "Echo back",
+        description: "Get UID",
         category: "utility",
         guide: ""
     },
