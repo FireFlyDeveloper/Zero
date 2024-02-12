@@ -16,7 +16,7 @@ Zero is an open-source Facebook Messenger chatbot designed to provide a seamless
 
 ## Getting Started
 
-## Some Names
+### Some Names
 
 - `Thread` is the chat ID.
 - `Admin` is the ID of user.
