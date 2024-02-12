@@ -26,7 +26,7 @@ module.exports = {
             if (match && match[1]) {
                 const meetCode = match[1];
                 const meetLink = `https://meet.google.com/${meetCode}`;
-                const message = await api.sendMessage('A Google Meet link has been identified; the link is currently being forwarded to the students of BSIT-1B.', event.threadID);
+                const message = await api.sendMessage('A Google Meet link has been identified; the link is currently being forwarded to the students.', event.threadID);
                 thread_to_send_notification.forEach(async (threadID) => {
                     await api.sendMessage(`From: ${threadName}\n===================\nGoogle Meet Code: ${meetCode}\nGoogle Meet Link: ${meetLink}`, threadID);
                 });
