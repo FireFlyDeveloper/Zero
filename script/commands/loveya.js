@@ -6,7 +6,7 @@ module.exports = {
         alias: ["love", "heart"],
         version: 1.0,
         author: "Saludes, Kim Eduard",
-        role: 1,
+        role: 0,
         countdown: 5,
         description: "Love you",
         category: "fun",

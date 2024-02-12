@@ -7,20 +7,21 @@ async function system_handler({ api, event }) {
             break;
 
         case "message":
-            onMessage({ api, event });
+            const args = event.body.split(' ');
+            onMessage({ api, event, args });
             if (loadConfig[0].friend_only && !Array.from(loadFriends).some(friend => event.senderID === friend.userID)) return;
             if (!loadConfig[0].group_thread && event.senderID !== event.threadID) return;
             if (!loadConfig[0].personal_thread && event.senderID === event.threadID) return;
 
             const commandToRun = loadedCommands.find(command => {
                 return (
-                    event.body.toLowerCase() === command.config.name ||
-                    (command.config.alias && command.config.alias.includes(event.body.toLowerCase()))
+                    args[0].toLowerCase() === command.config.name ||
+                    (command.config.alias && command.config.alias.includes(args[0].toLowerCase()))
                 );
             });
-
             if (commandToRun) {
-                commandToRun.onRun({ api, event });
+                if (commandToRun.config.role === 1 && loadConfig[0].admin.includes(event.senderID)) return commandToRun.onRun({ api, event, args });
+                if (commandToRun.config.role === 0) return commandToRun.onRun({ api, event, args });
             }
             break;
     }

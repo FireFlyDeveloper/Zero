@@ -4,7 +4,7 @@ module.exports = {
         alias: "",
         version: 1.0,
         author: "Saludes, Kim Eduard",
-        role: 0,
+        role: 1,
         countdown: 0,
         description: "Join Event",
         category: "group",
