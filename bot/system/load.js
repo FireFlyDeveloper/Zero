@@ -6,6 +6,12 @@ const loadedCommandNames = new Set();
 const loadedCommandAliases = new Set();
 
 const loadFriends = new Set();
+const loadConfig = new Array();
+
+function load_config() {
+    const config = fs.readFileSync('config.json', "utf8");
+    loadConfig.push(JSON.parse(config));
+}
 
 function load_commands() {
     const commandsFolder = path.join(__dirname, '../../script/commands');
@@ -16,12 +22,12 @@ function load_commands() {
                 const commandModule = require(path.join(commandsFolder, file));
 
                 if (commandModule && commandModule.config && commandModule.onRun) {
-                    const { config, onRun, onLoad } = commandModule;
+                    const { config, onRun, onLoad, onEvent, onMessage } = commandModule;
 
                     if (loadedCommandNames.has(config.name) || loadedCommandAliases.has(config.alias)) {
                         console.error(`Name already exist, unloading: ${file}`);
                     } else {
-                        loadedCommands.push({ config, onRun, onLoad });
+                        loadedCommands.push({ config, onRun, onLoad, onEvent, onMessage });
                         loadedCommandNames.add(config.name);
                         if (config.alias) {
                             loadedCommandAliases.add(config.alias);
@@ -45,4 +51,4 @@ async function load_friends({ api }) {
     });
 }
 
-module.exports = { load_commands, loadedCommands, loadFriends, load_friends };
+module.exports = { load_commands, loadedCommands, loadFriends, load_friends, load_config, loadConfig };

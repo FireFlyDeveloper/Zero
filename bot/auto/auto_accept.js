@@ -6,7 +6,7 @@ module.exports = async function ({ api }) {
   const config_json = await fs.readFile("config.json", "utf8");
   const config = {
     acceptPending: {
-      status: config_json.auto_accept,
+      status: JSON.parse(config_json).auto_accept,
       time: 30,
       note: 'Approve waiting messages after a certain time, time based on minute.',
       author: 'Saludes, Kim Eduard'

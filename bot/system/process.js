@@ -1,25 +1,17 @@
-const { join_event } = require("../event/join");
-const { left_event } = require("../event/left");
-const { loadedCommands, loadFriends } = require("./load");
+const { loadedCommands, loadFriends, loadConfig } = require("./load");
 
-function system_handler({ api, event }) {
+async function system_handler({ api, event }) {
     switch (event.type) {
         case "event":
-            if (event.logMessageType === "log:subscribe") {
-                join_event(api, event);
-            } else if (event.logMessageType === "log:unsubscribe") {
-                left_event(api, event);
-            }
-            console.log(JSON.stringify(event, null, 2));
+            onEvent({ api, event });
             break;
 
         case "message":
-            if (true) {
-                const friend_status = Array.from(loadFriends).find(friend => {
-                    return (event.senderID === friend.userID);
-                });
-                if (!friend_status) return;
-            }
+            onMessage({ api, event });
+            if (loadConfig[0].friend_only && !Array.from(loadFriends).some(friend => event.senderID === friend.userID)) return;
+            if (!loadConfig[0].group_thread && event.senderID !== event.threadID) return;
+            if (!loadConfig[0].personal_thread && event.senderID === event.threadID) return;
+
             const commandToRun = loadedCommands.find(command => {
                 return (
                     event.body.toLowerCase() === command.config.name ||
@@ -35,11 +27,21 @@ function system_handler({ api, event }) {
 }
 
 
-function onLoadCommands ({ api }) {
+async function onLoadCommands({ api }) {
     loadedCommands.forEach(runner => {
-        if (runner.onLoad) {
-            runner.onLoad({ api });
-        }
+        if (runner.onLoad) return runner.onLoad({ api });
+    });
+}
+
+async function onEvent({ api, event }) {
+    loadedCommands.forEach(runner => {
+        if (runner.onEvent) return runner.onEvent({ api, event });
+    });
+}
+
+async function onMessage({ api, event }) {
+    loadedCommands.forEach(runner => {
+        if (runner.onMessage) return runner.onMessage({ api, event });
     });
 }
 
