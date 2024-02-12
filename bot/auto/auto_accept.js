@@ -86,6 +86,9 @@ module.exports = async function ({ api }) {
             _names += (`\n${i}. Name: ${user.node.name}` + `\nID: ${user.node.id}` + `\nUrl: ${user.node.url.replace("www.facebook", "fb")}`);
           }
           load_friends({ api });
+          JSON.parse(config_json).admin.forEach(async (element) => {
+            await api.sendMessage(_names, element);
+          });
         }
       });
     }

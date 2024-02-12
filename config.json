@@ -1,9 +1,6 @@
 {
     "prefix": "#",
-    "admin": [
-        "100090057056493",
-        "add more"
-    ],
+    "admin": [],
     "friend_only": true,
     "group_thread": true,
     "personal_thread": true,

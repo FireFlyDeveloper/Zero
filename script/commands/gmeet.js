@@ -13,7 +13,7 @@ module.exports = {
     onRun: async function () {},
     onMessage: async function ({ api, event }) {
         const thread_to_listen = [
-            "7379943615401950"
+            "7379943615401950" // Change this to target Group chat to listen for google meet link.
         ];
         if (event.body.includes('meet.google.com/') && thread_to_listen.includes(event.threadID)) {
             const threadInfo = await api.getThreadInfo(event.threadID);
