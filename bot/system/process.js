@@ -13,7 +13,6 @@ async function system_handler({ api, event }) {
             if (!loadConfig[0].group_thread && event.senderID !== event.threadID) return;
             if (!loadConfig[0].personal_thread && event.senderID === event.threadID) return;
             args[0] = args[0].replace(loadConfig[0].prefix, '');
-            console.log(args);
             onMessage({ api, event, args });
             const commandToRun = loadedCommands.find(command => {
                 return (
