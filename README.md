@@ -1,5 +1,7 @@
 # Zero - Facebook Messenger Chatbot
 
+![Zero Logo](Firefly.png)
+
 ## About
 
 Zero is an open-source Facebook Messenger chatbot designed to provide a seamless conversational experience for users. Whether you're looking for information, assistance, or just want to engage in casual conversation, Zero is here to help. The bot is built on the principles of simplicity, efficiency, and customization, making it a versatile solution for various use cases.
