@@ -28,7 +28,7 @@ Zero is an open-source Facebook Messenger chatbot designed to provide a seamless
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/yourusername/zero-chatbot.git
+    git clone https://github.com/FireFlyDeveloper/Zero.git
     ```
 
 2. Install dependencies:
