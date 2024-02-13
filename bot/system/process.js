@@ -8,11 +8,11 @@ async function system_handler({ api, event }) {
 
         case "message":
             const args = event.body.split(' ');
-            onMessage({ api, event });
-            if (!args[0].includes(loadConfig[0].prefix)) return;
             if (loadConfig[0].friend_only && !Array.from(loadFriends).some(friend => event.senderID === friend.userID)) return;
             if (!loadConfig[0].group_thread && event.senderID !== event.threadID) return;
             if (!loadConfig[0].personal_thread && event.senderID === event.threadID) return;
+            onMessage({ api, event });
+            if (!args[0].includes(loadConfig[0].prefix)) return;
             args[0] = args[0].replace(loadConfig[0].prefix, '');
             const commandToRun = loadedCommands.find(command => {
                 return (
