@@ -29,6 +29,7 @@ async function system_handler({ api, event }) {
             });
 
             if (commandToRun) {
+                args.shift();
                 if (commandToRun.config.role === 1 && global.utils.loadConfig[0].admin.includes(event.senderID)) {
                     return commandToRun.onRun({ api, event, args, commandName: commandToRun.config.name });
                 }
@@ -54,6 +55,7 @@ async function system_handler({ api, event }) {
     
                 if (commandToRun) {
                     const args = event.body.split(' ');
+                    args.shift();
                     if (commandToRun.config.role === 1 && global.utils.loadConfig[0].admin.includes(event.senderID)) {
                         return commandToRun.onReply({ api, event, args, commandName: commandToRun.config.name, onReply });
                     }
