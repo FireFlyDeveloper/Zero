@@ -10,7 +10,21 @@ global.utils = {
     loadConfig: [],
     onLoad: [],
     onEvent: [],
-    onMessage: []
+    onMessage: [],
+    onReplyValue: [],
+    onReply: function (data) {
+        if (!data.commandName) return console.error('commandName are missing.');
+        if (!data.messageID) return console.error('messageID are missing.');
+        global.utils.onReplyValue.push(data);
+        setTimeout(() => {
+            const index = global.utils.onReplyValue.indexOf(data);
+            if (index !== -1) {
+                global.utils.onReplyValue.splice(index, 1);
+                console.log(`Data expired and removed: ${data}`);
+            }
+        }, 15 * 60 * 1000);
+    },
+    ONReply: []
 };
 
 function loadConfig() {
@@ -31,16 +45,17 @@ function loadCommands() {
                 const commandModule = require(path.join(commandsFolder, file));
 
                 if (commandModule && commandModule.config && commandModule.onRun) {
-                    const { config, onRun, onLoad, onEvent, onMessage } = commandModule;
+                    const { config, onRun, onLoad, onEvent, onMessage, onReply } = commandModule;
 
                     if (loadedCommandNames.has(config.name) || loadedCommandAliases.has(config.alias)) {
                         console.error(`Name or alias already exists, unloading: ${file}`);
                     } else {
-                        global.utils.loadedCommands.push({ config, onRun, onLoad, onEvent, onMessage });
+                        global.utils.loadedCommands.push({ config, onRun });
 
-                        if (onLoad) global.utils.onLoad.push({ onLoad });
-                        if (onEvent) global.utils.onEvent.push({ onEvent });
-                        if (onMessage) global.utils.onMessage.push({ onMessage });
+                        if (onLoad) global.utils.onLoad.push({ config, onLoad });
+                        if (onEvent) global.utils.onEvent.push({ config, onEvent });
+                        if (onMessage) global.utils.onMessage.push({ config, onMessage });
+                        if (onReply) global.utils.ONReply.push({ config, onReply });
 
                         loadedCommandNames.add(config.name);
                         if (config.alias) loadedCommandAliases.add(config.alias);

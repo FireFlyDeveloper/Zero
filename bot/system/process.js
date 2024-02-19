@@ -30,10 +30,36 @@ async function system_handler({ api, event }) {
 
             if (commandToRun) {
                 if (commandToRun.config.role === 1 && global.utils.loadConfig[0].admin.includes(event.senderID)) {
-                    return commandToRun.onRun({ api, event, args });
+                    return commandToRun.onRun({ api, event, args, commandName: commandToRun.config.name });
                 }
                 if (commandToRun.config.role === 0) {
-                    return commandToRun.onRun({ api, event, args });
+                    return commandToRun.onRun({ api, event, args, commandName: commandToRun.config.name });
+                }
+            }
+            break;
+
+        case "message_reply":
+            const onReply = global.utils.onReplyValue.find(command => {
+                return (
+                    event.messageReply.messageID === command.messageID
+                );
+            });
+
+            if (onReply) {
+                const commandToRun = global.utils.ONReply.find(command => {
+                    return (
+                        onReply.commandName === command.config.name
+                    );
+                });
+    
+                if (commandToRun) {
+                    const args = event.body.split(' ');
+                    if (commandToRun.config.role === 1 && global.utils.loadConfig[0].admin.includes(event.senderID)) {
+                        return commandToRun.onReply({ api, event, args, commandName: commandToRun.config.name, onReply });
+                    }
+                    if (commandToRun.config.role === 0) {
+                        return commandToRun.onReply({ api, event, args, commandName: commandToRun.config.name, onReply });
+                    }
                 }
             }
             break;
