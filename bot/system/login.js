@@ -2,7 +2,7 @@ const fs = require("fs").promises;
 const login = require("@xaviabot/fca-unofficial");
 const { system_handler, onLoadCommands } = require("./process");
 const auto_accept = require("../auto/auto_accept");
-const { load_friends } = require("./load");
+const { loadFriends } = require("./load");
 
 async function start_facebook_login() {
     try {
@@ -17,7 +17,7 @@ async function start_facebook_login() {
 
             onLoadCommands({ api });
             auto_accept({ api });
-            load_friends({ api });
+            loadFriends({ api });
 
             await api.setOptions({
                 listenEvents: true,

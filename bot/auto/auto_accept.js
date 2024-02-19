@@ -1,5 +1,5 @@
 const cron = require('node-cron');
-const { load_friends } = require("../system/load");
+const { loadFriends } = require("../system/load");
 const fs = require("fs").promises;
 
 module.exports = async function ({ api }) {
@@ -85,7 +85,7 @@ module.exports = async function ({ api }) {
             api.sendMessage(`You have been approved for the queue. (This is an automated message)`, user.node.id);
             _names += (`\n${i}. Name: ${user.node.name}` + `\nID: ${user.node.id}` + `\nUrl: ${user.node.url.replace("www.facebook", "fb")}`);
           }
-          load_friends({ api });
+          loadFriends({ api });
           JSON.parse(config_json).admin.forEach(async (element) => {
             await api.sendMessage(_names, element);
           });

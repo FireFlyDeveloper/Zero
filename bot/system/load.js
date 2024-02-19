@@ -1,19 +1,28 @@
 const fs = require('fs');
 const path = require('path');
 
-var loadedCommands = new Array();
 const loadedCommandNames = new Set();
 const loadedCommandAliases = new Set();
 
-var loadFriends = new Set();
-var loadConfig = new Array();
+global.utils = {
+    loadedCommands: [],
+    loadFriends: new Set(),
+    loadConfig: [],
+    onLoad: [],
+    onEvent: [],
+    onMessage: []
+};
 
-function load_config() {
-    const config = fs.readFileSync('config.json', "utf8");
-    loadConfig.push(JSON.parse(config));
+function loadConfig() {
+    try {
+        const config = fs.readFileSync('config.json', 'utf8');
+        global.utils.loadConfig.push(JSON.parse(config));
+    } catch (error) {
+        console.error('Error loading config:', error.message);
+    }
 }
 
-function load_commands() {
+function loadCommands() {
     const commandsFolder = path.join(__dirname, '../../script/commands');
 
     fs.readdirSync(commandsFolder).forEach(file => {
@@ -25,13 +34,17 @@ function load_commands() {
                     const { config, onRun, onLoad, onEvent, onMessage } = commandModule;
 
                     if (loadedCommandNames.has(config.name) || loadedCommandAliases.has(config.alias)) {
-                        console.error(`Name already exist, unloading: ${file}`);
+                        console.error(`Name or alias already exists, unloading: ${file}`);
                     } else {
-                        loadedCommands.push({ config, onRun, onLoad, onEvent, onMessage });
+                        global.utils.loadedCommands.push({ config, onRun, onLoad, onEvent, onMessage });
+
+                        if (onLoad) global.utils.onLoad.push({ onLoad });
+                        if (onEvent) global.utils.onEvent.push({ onEvent });
+                        if (onMessage) global.utils.onMessage.push({ onMessage });
+
                         loadedCommandNames.add(config.name);
-                        if (config.alias) {
-                            loadedCommandAliases.add(config.alias);
-                        }
+                        if (config.alias) loadedCommandAliases.add(config.alias);
+
                         console.log(`Loaded command: ${config.name}`);
                     }
                 } else {
@@ -44,11 +57,13 @@ function load_commands() {
     });
 }
 
-async function load_friends({ api }) {
-    const friends = await api.getFriendsList();
-    friends.forEach(friend => {
-        loadFriends.add(friend);
-    });
+async function loadFriends({ api }) {
+    try {
+        const friends = await api.getFriendsList();
+        friends.forEach(friend => global.utils.loadFriends.add(friend));
+    } catch (error) {
+        console.error('Error loading friends:', error.message);
+    }
 }
 
-module.exports = { load_commands, loadedCommands, loadFriends, load_friends, load_config, loadConfig };
+module.exports = { loadCommands, loadFriends, loadConfig };
