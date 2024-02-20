@@ -6,5 +6,6 @@
     "friend_only": true,
     "group_thread": true,
     "personal_thread": true,
-    "auto_accept": true
+    "auto_accept": true,
+    "autoRestart": true
 }
