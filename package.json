@@ -4,8 +4,7 @@
   "description": "Facebook Messenger Bot Unofficial",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "build": "echo 'Build command goes here'"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
