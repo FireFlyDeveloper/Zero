@@ -31,10 +31,18 @@ async function system_handler({ api, event }) {
             if (commandToRun) {
                 args.shift();
                 if (commandToRun.config.role === 1 && global.utils.loadConfig[0].admin.includes(event.senderID)) {
-                    return commandToRun.onRun({ api, event, args, commandName: commandToRun.config.name });
+                    try {
+                        return commandToRun.onRun({ api, event, args, commandName: commandToRun.config.name });
+                    } catch (error) {
+                        console.error(error);
+                    }
                 }
                 if (commandToRun.config.role === 0) {
-                    return commandToRun.onRun({ api, event, args, commandName: commandToRun.config.name });
+                    try {
+                        return commandToRun.onRun({ api, event, args, commandName: commandToRun.config.name });
+                    } catch (error) {
+                        console.error(error);
+                    }
                 }
             }
             break;
@@ -57,10 +65,18 @@ async function system_handler({ api, event }) {
                     const args = event.body.split(' ');
                     args.shift();
                     if (commandToRun.config.role === 1 && global.utils.loadConfig[0].admin.includes(event.senderID)) {
-                        return commandToRun.onReply({ api, event, args, commandName: commandToRun.config.name, onReply });
+                        try {
+                            return commandToRun.onReply({ api, event, args, commandName: commandToRun.config.name, onReply });
+                        } catch (error) {
+                            console.error(error);
+                        }
                     }
                     if (commandToRun.config.role === 0) {
-                        return commandToRun.onReply({ api, event, args, commandName: commandToRun.config.name, onReply });
+                        try {
+                            return commandToRun.onReply({ api, event, args, commandName: commandToRun.config.name, onReply });
+                        } catch (error) {
+                            console.error(error);
+                        }
                     }
                 }
             }
@@ -70,19 +86,31 @@ async function system_handler({ api, event }) {
 
 async function onLoadCommands({ api }) {
     for (const runner of global.utils.onLoad) {
-        await runner.onLoad({ api });
+        try {
+            return runner.onLoad({ api });
+        } catch (error) {
+            console.error(error);
+        }
     }
 }
 
 async function onEvent({ api, event }) {
     for (const runner of global.utils.onEvent) {
-        await runner.onEvent({ api, event });
+        try {
+            return runner.onEvent({ api, event });
+        } catch (error) {
+            console.error(error);
+        }
     }
 }
 
 async function onMessage({ api, event }) {
     for (const runner of global.utils.onMessage) {
-        await runner.onMessage({ api, event });
+        try {
+            return runner.onMessage({ api, event });
+        } catch (error) {
+            console.error(error);
+        }
     }
 }
 
