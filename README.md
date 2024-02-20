@@ -20,9 +20,9 @@ Zero is an open-source Facebook Messenger chatbot designed to provide a seamless
 
 ### Terminology
 
-- `Thread` is the chat ID.
-- `Admin` is the ID of user.
-- `Appstate` is the cookie of the facebook account.
+- `ThreadID` - Chat ID.
+- `UserID`  - ID of user.
+- `Appstate` - Cookie of the facebook account.
 
 ### Prerequisites
 
