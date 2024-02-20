@@ -19,7 +19,6 @@
   "dependencies": {
     "@xaviabot/fca-unofficial": "github:XaviaTeam/fca-unofficial",
     "cron": "^3.1.6",
-    "fca-project-orion": "^1.1.22",
     "node-cron": "^3.0.3"
   }
 }

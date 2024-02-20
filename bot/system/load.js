@@ -20,7 +20,6 @@ global.utils = {
             const index = global.utils.onReplyValue.indexOf(data);
             if (index !== -1) {
                 global.utils.onReplyValue.splice(index, 1);
-                console.log(`Data expired and removed: ${data}`);
             }
         }, 15 * 60 * 1000);
     },
