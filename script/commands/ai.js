@@ -20,10 +20,10 @@ module.exports = {
         else {
         
             const message = await api.sendMessage("Thinking...", event.threadID, event.messageID);
-            await api.setMessageReaction("⏳", message.messageID);
+            await api.setMessageReaction("💭", event.messageID, (err) => {}, true);
             const response = await axios.get(`https://openaikey.onrender.com/api?prompt=${encodeURIComponent(question)}`);
             const messageText = response.data.response.trim();
-            await api.setMessageReaction("✅", message.messageID);
+            await api.setMessageReaction("✅", event.messageID, (err) => {}, true);
             return await api.editMessage(messageText, message.messageID);
         }
     } catch (error) {
