@@ -34,14 +34,14 @@ async function system_handler({ api, event }) {
                     try {
                         return await commandToRun.onRun({ api, event, args, commandName: commandToRun.config.name });
                     } catch (error) {
-                        console.error(error);
+                        console.error(error.message);
                     }
                 }
                 if (commandToRun.config.role === 0) {
                     try {
                         return await commandToRun.onRun({ api, event, args, commandName: commandToRun.config.name });
                     } catch (error) {
-                        console.error(error);
+                        console.error(error.message);
                     }
                 }
             }
@@ -68,14 +68,14 @@ async function system_handler({ api, event }) {
                         try {
                             return await commandToRun.onReply({ api, event, args, commandName: commandToRun.config.name, onReply });
                         } catch (error) {
-                            console.error(error);
+                            console.error(error.message);
                         }
                     }
                     if (commandToRun.config.role === 0) {
                         try {
                             return await commandToRun.onReply({ api, event, args, commandName: commandToRun.config.name, onReply });
                         } catch (error) {
-                            console.error(error);
+                            console.error(error.message);
                         }
                     }
                 }
@@ -89,7 +89,7 @@ async function onLoadCommands({ api }) {
         try {
             return await runner.onLoad({ api });
         } catch (error) {
-            console.error(error);
+            console.error(error.message);
         }
     }
 }
@@ -99,7 +99,7 @@ async function onEvent({ api, event }) {
         try {
             return await runner.onEvent({ api, event });
         } catch (error) {
-            console.error(error);
+            console.error(error.message);
         }
     }
 }
@@ -109,7 +109,7 @@ async function onMessage({ api, event }) {
         try {
             return await runner.onMessage({ api, event });
         } catch (error) {
-            console.error(error);
+            console.error(error.message);
         }
     }
 }
