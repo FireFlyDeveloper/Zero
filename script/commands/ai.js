@@ -18,9 +18,12 @@ module.exports = {
       return await api.sendMessage(`please input a keyword or what to ask! `, event.threadID);
     else {
       
+      const message = await api.sendMessage("Thinking...", event.threadID, event.messageID);
+      await api.setMessageReaction("💭", message.messageID);
       const response = await axios.get(`https://openaikey.onrender.com/api?prompt=${encodeURIComponent(question)}`);
       const messageText = response.data.response.trim();
-      await api.sendMessage(messageText, event.threadID, event.messageID);
+      await api.setMessageReaction("✅", message.messageID);
+      return await api.editMessage(messageText, message.messageID);
     }
   }
 };
