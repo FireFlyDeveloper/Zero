@@ -18,6 +18,7 @@
   "homepage": "https://github.com/FireFlyDeveloper/Zero#readme",
   "dependencies": {
     "@xaviabot/fca-unofficial": "github:XaviaTeam/fca-unofficial",
+    "axios": "^1.6.7",
     "cron": "^3.1.6",
     "node-cron": "^3.0.3"
   }
