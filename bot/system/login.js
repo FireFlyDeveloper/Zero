@@ -15,9 +15,9 @@ async function start_facebook_login() {
                 return;
             }
 
-            onLoadCommands({ api });
-            auto({ api });
-            loadFriends({ api });
+            await onLoadCommands({ api });
+            await auto({ api });
+            await loadFriends({ api });
 
             await api.setOptions({
                 listenEvents: true,
@@ -33,7 +33,7 @@ async function start_facebook_login() {
                 }
 
                 try {
-                    system_handler({ api, event });
+                    await system_handler({ api, event });
                 } catch (error) {
                     console.error(error);
                 }
