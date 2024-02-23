@@ -1,5 +1,19 @@
 require("./load");
 
+const cooldowns = {};
+
+function isUserInCooldown(userId, cooldownTime) {
+    const currentTime = Date.now();
+    const lastExecutionTime = cooldowns[userId] || 0;
+    const elapsedTime = currentTime - lastExecutionTime;
+
+    return elapsedTime < cooldownTime;
+}
+
+function updateUserCooldown(userId) {
+    cooldowns[userId] = Date.now();
+}
+
 async function system_handler({ api, event }) {
     switch (event.type) {
         case "event":
@@ -20,23 +34,37 @@ async function system_handler({ api, event }) {
             if (!global.utils.loadConfig[0].personal_thread && event.senderID === event.threadID) return;
 
             args[0] = args[0].slice(global.utils.loadConfig[0].prefix.length);
-            
-            const commandToRun = binarySearch(global.utils.loadedCommands, args[0].toLowerCase());
+
+            const targetName = args[0].toLowerCase();
+
+            const commandToRun = binarySearch(global.utils.loadedCommands, targetName);
 
             if (commandToRun) {
                 args.shift();
-                if (commandToRun.config.role === 1 && global.utils.loadConfig[0].admin.includes(event.senderID)) {
-                    try {
-                        return await commandToRun.onRun({ api, event, args, commandName: commandToRun.config.name });
-                    } catch (error) {
-                        console.error(error.message);
+
+                const cooldownTime = commandToRun.config.countdown * 1000;
+
+                if (isUserInCooldown(event.senderID, cooldownTime)) {
+                    await api.sendMessage(`Command is on cooldown for ${commandToRun.config.countdown} seconds. Please wait.`, event.threadID);
+                } else {
+
+                    if (commandToRun.config.role === 1 && global.utils.loadConfig[0].admin.includes(event.senderID)) {
+                        try {
+                            await commandToRun.onRun({ api, event, args, commandName: commandToRun.config.name });
+
+                            updateUserCooldown(event.senderID);
+                        } catch (error) {
+                            console.error(error.message);
+                        }
                     }
-                }
-                if (commandToRun.config.role === 0) {
-                    try {
-                        return await commandToRun.onRun({ api, event, args, commandName: commandToRun.config.name });
-                    } catch (error) {
-                        console.error(error.message);
+                    if (commandToRun.config.role === 0) {
+                        try {
+                            await commandToRun.onRun({ api, event, args, commandName: commandToRun.config.name });
+
+                            updateUserCooldown(event.senderID);
+                        } catch (error) {
+                            console.error(error.message);
+                        }
                     }
                 }
             }
@@ -55,7 +83,7 @@ async function system_handler({ api, event }) {
                         onReply.commandName === command.config.name
                     );
                 });
-    
+
                 if (commandToRun) {
                     const args = event.body.split(' ');
                     args.shift();
