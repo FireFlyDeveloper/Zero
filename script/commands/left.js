@@ -13,9 +13,9 @@ module.exports = {
     onRun: async function () {},
     onEvent: async function ({ api, event }) {
 		if (event.logMessageType === "log:unsubscribe") {
-            if (event.logMessageData.leftParticipantFbId === api.getCurrentUserID()) return;
+            if (event.logMessageData.leftParticipantFbId === await api.getCurrentUserID()) return;
             if (event.logMessageData.leftParticipantFbId !== event.author) return;
-            return api.sendMessage("User left detected ⚠", event.threadID);
+            return await api.sendMessage("User left detected ⚠", event.threadID);
         }
     }
 };

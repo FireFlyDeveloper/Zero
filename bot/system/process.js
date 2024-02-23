@@ -45,7 +45,7 @@ async function system_handler({ api, event }) {
                 const cooldownTime = commandToRun.config.countdown * 1000;
 
                 if (isUserInCooldown(event.senderID, cooldownTime)) {
-                    await api.sendMessage(`Command is on cooldown for ${commandToRun.config.countdown} seconds. Please wait.`, event.threadID);
+                    await api.sendMessage(`The command '${commandToRun.config.name}' is on cooldown for ${Math.ceil((cooldownTime - (Date.now() - cooldowns[event.senderID])) / 1000)} seconds. Please wait.⏳`, event.threadID);
                 } else {
 
                     if (commandToRun.config.role === 1 && global.utils.loadConfig[0].admin.includes(event.senderID)) {
