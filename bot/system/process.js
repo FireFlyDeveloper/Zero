@@ -21,12 +21,7 @@ async function system_handler({ api, event }) {
 
             args[0] = args[0].slice(global.utils.loadConfig[0].prefix.length);
             
-            const commandToRun = global.utils.loadedCommands.find(command => {
-                return (
-                    args[0].toLowerCase() === command.config.name ||
-                    (command.config.alias && command.config.alias.includes(args[0].toLowerCase()))
-                );
-            });
+            const commandToRun = binarySearch(global.utils.loadedCommands, args[0].toLowerCase());
 
             if (commandToRun) {
                 args.shift();
@@ -112,6 +107,30 @@ async function onMessage({ api, event }) {
             console.error(error.message);
         }
     }
+}
+
+function binarySearch(loadedCommands, targetName) {
+    let left = 0;
+    let right = loadedCommands.length - 1;
+
+    while (left <= right) {
+        const mid = Math.floor((left + right) / 2);
+        const currentCommand = loadedCommands[mid];
+        const currentName = currentCommand.config.name;
+        const currentAlias = currentCommand.config.alias || [];
+
+        if (currentName === targetName || currentAlias.includes(targetName)) {
+            return currentCommand;
+        }
+
+        if (currentName < targetName) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+
+    return null;
 }
 
 module.exports = { system_handler, onLoadCommands };

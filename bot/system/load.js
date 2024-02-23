@@ -37,6 +37,7 @@ function loadConfig() {
 
 function loadCommands() {
     const commandsFolder = path.join(__dirname, '../../script/commands');
+    const sortedCommands = [];
 
     fs.readdirSync(commandsFolder).forEach(file => {
         if (file.endsWith('.js')) {
@@ -49,7 +50,8 @@ function loadCommands() {
                     if (loadedCommandNames.has(config.name) || loadedCommandAliases.has(config.alias)) {
                         console.error(`Name or alias already exists, unloading: ${file}`);
                     } else {
-                        global.utils.loadedCommands.push({ config, onRun });
+                        // Push the command to the sorted array
+                        sortedCommands.push({ config, onRun });
 
                         if (onLoad) global.utils.onLoad.push({ config, onLoad });
                         if (onEvent) global.utils.onEvent.push({ config, onEvent });
@@ -69,6 +71,9 @@ function loadCommands() {
             }
         }
     });
+
+    sortedCommands.sort((a, b) => a.config.name.localeCompare(b.config.name));
+    global.utils.loadedCommands.push(...sortedCommands);
 }
 
 async function loadFriends({ api }) {
