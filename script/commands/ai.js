@@ -35,7 +35,7 @@ module.exports = {
             }
             
             const info = await api.getUserInfo(event.senderID);
-            const name = info[event.senderID].name;
+            const name = info[event.senderID].firstName;
             const message = await api.sendMessage("Thinking...💭", event.threadID, event.messageID);
             const response = await axios.get(`https://openaikey.onrender.com/api?prompt=${encodeURIComponent(`User name: ${name}. User prompt:${question}`)}`);
             const messageText = response.data.response.trim();
