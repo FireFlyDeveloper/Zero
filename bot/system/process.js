@@ -110,7 +110,7 @@ async function system_handler({ api, event }) {
 async function onLoadCommands({ api }) {
     for (const runner of global.utils.onLoad) {
         try {
-            return await runner.onLoad({ api });
+            await runner.onLoad({ api });
         } catch (error) {
             console.error(error.message);
         }
@@ -120,7 +120,7 @@ async function onLoadCommands({ api }) {
 async function onEvent({ api, event }) {
     for (const runner of global.utils.onEvent) {
         try {
-            return await runner.onEvent({ api, event });
+            await runner.onEvent({ api, event });
         } catch (error) {
             console.error(error.message);
         }
@@ -130,7 +130,7 @@ async function onEvent({ api, event }) {
 async function onMessage({ api, event }) {
     for (const runner of global.utils.onMessage) {
         try {
-            return await runner.onMessage({ api, event });
+            await runner.onMessage({ api, event });
         } catch (error) {
             console.error(error.message);
         }
