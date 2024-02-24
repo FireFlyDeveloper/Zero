@@ -15,10 +15,8 @@ module.exports = {
         if (event.logMessageType === "log:unsubscribe") {
             const leftParticipantFbId = event.logMessageData.leftParticipantFbId;
 
-            // Ignore if the bot itself left
             if (leftParticipantFbId === await api.getCurrentUserID()) return;
 
-            // Ignore if the event author is not the one who left
             if (leftParticipantFbId !== event.author) return;
 
             const userInfo = await api.getUserInfo(leftParticipantFbId);

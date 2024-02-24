@@ -22,7 +22,7 @@ module.exports = {
                 const mentions = addedParticipants.map(participant => ({
                     tag: `@${participant.fullName}`,
                     id: participant.userFbId,
-                    fromIndex: 6, // Highlight the occurrence of @Username in the message body
+                    fromIndex: 6,
                 }));
 
                 let welcomeMessage = "";
