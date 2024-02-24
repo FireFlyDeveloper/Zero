@@ -37,8 +37,8 @@ module.exports = {
             const info = await api.getUserInfo(event.senderID);
             const name = info[event.senderID].firstName;
             const message = await api.sendMessage("Thinking...💭", event.threadID, event.messageID);
-            const response = await axios.get(`https://openaikey.onrender.com/api?prompt=${encodeURIComponent(`User name: ${name}. User prompt:${question}`)}`);
-            const messageText = response.data.response.trim();
+            const response = await axios.get(`https://nekohime.xyz/api/ai/openai?text=${encodeURIComponent(`User name: ${name}. User prompt:${question}`)}`);
+            const messageText = response.data.result.trim();
             await api.editMessage(messageText, message.messageID);
         } catch (error) {
             console.error("Error in AI command:", error.message);
