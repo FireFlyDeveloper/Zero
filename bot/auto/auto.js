@@ -21,8 +21,9 @@ module.exports = async function ({ api }) {
 
 
   function autoRestart() {
-    cron.schedule('0 0 * * *', () => {
-      console.log('Executing exit(2) at 12 AM');
+    cron.schedule('0 0 * * *', async () => {
+      console.log('Executing Auto Restart...');
+      await fs.writeFile('appstate.json', JSON.stringify(api.getAppState(), null,'\t'));
       process.exit(2);
     }, {
       scheduled: true,
