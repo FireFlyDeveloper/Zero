@@ -10,7 +10,6 @@ module.exports = {
         category: "school",
         guide: ""
     },
-    onRun: async function () {},
     onMessage: async function ({ api, event }) {
         const thread_to_listen = [
             "7379943615401950" // Change this to target Group chat or chat to listen for google meet link.

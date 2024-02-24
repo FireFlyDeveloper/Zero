@@ -10,7 +10,6 @@ module.exports = {
         category: "group",
         guide: ""
     },
-    onRun: async function () {},
     onEvent: async function ({ api, event }) {
         if (event.logMessageType === "log:unsubscribe") {
             const leftParticipantFbId = event.logMessageData.leftParticipantFbId;

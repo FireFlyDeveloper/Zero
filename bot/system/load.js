@@ -47,15 +47,14 @@ async function loadCommands() {
                 try {
                     const commandModule = require(path.join(commandsFolder, file));
 
-                    if (commandModule && commandModule.config && commandModule.onRun) {
+                    if (commandModule && commandModule.config) {
                         const { config, onRun, onLoad, onEvent, onMessage, onReply } = commandModule;
 
                         if (loadedCommandNames.has(config.name) || loadedCommandAliases.has(config.alias)) {
                             console.error(`Name or alias already exists, unloading: ${file}`);
                         } else {
                             // Push the command to the sorted array
-                            sortedCommands.push({ config, onRun });
-
+                            if (onRun) sortedCommands.push({ config, onRun });
                             if (onLoad) global.utils.onLoad.push({ config, onLoad });
                             if (onEvent) global.utils.onEvent.push({ config, onEvent });
                             if (onMessage) global.utils.onMessage.push({ config, onMessage });

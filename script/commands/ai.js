@@ -21,7 +21,6 @@ module.exports = {
         category: "Artificial I",
         guide: "Ai or multiprefix"
     },
-    onRun: async function () {},
     onMessage: async function ({ api, event }) {
         try {
             const prefix = Prefixes.find((p) => event.body && event.body.toLowerCase().startsWith(p));

@@ -12,7 +12,6 @@ module.exports = {
         category: "utility",
         guide: ""
     },
-    onRun: async function ({ api, event }) { },
     onMessage: async function ({ api, event }) {
         const tiktokUrlRegex = /https:\/\/vt\.tiktok\.com\/[a-zA-Z0-9]{8,}\//;
         const match = event.body.match(tiktokUrlRegex);
