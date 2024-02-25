@@ -19,14 +19,16 @@ module.exports = {
         if (match) {
             const tiktokLink = match[0];
             try {
-                await api.sendMessage('Tiktok url detected ⚠', event.threadID, event.messageID);
+                const message = await api.sendMessage('Tiktok♪ url detected ⚠', event.threadID, event.messageID);
                 const link = await axios.get(`https://tiktokapi-2z4a.onrender.com/downloadTiktok?url=${tiktokLink}`);
+                if (link.data.images.length !== 0) return await api.editMessage('Unsupported tiktok url 😢', message.messageID);
+                await api.editMessage('Downloading...⬇', message.messageID);
                 const buffer = await downloadFile(link);
-                if (buffer == null) return;
                 await api.sendMessage({
                     body: ``,
                     attachment: buffer,
                 }, event.threadID, event.messageID);
+                await api.editMessage('Downloaded ✅', message.messageID);
             } catch (error) {
                 console.error(error);
             }            
