@@ -1,4 +1,5 @@
 const figlet = require('figlet');
+const chalk = require('chalk');
 
 global.design = {
     logo: async function () {
@@ -18,7 +19,7 @@ global.design = {
         let currentFrame = 0;
     
         return setInterval(() => {
-            process.stdout.write('\r' + 'LOGGING IN ' + frames[currentFrame] + '\r');
+            process.stdout.write(`\r${chalk.bold.blue('[')} ${chalk.bold.yellow('LOGGING IN')} ${frames[currentFrame]} ${chalk.bold.blue(']')}\r`);
     
             currentFrame = (currentFrame + 1) % frames.length;
         }, 100);

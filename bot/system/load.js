@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const chalk = require('chalk');
 
 const loadedCommandNames = new Set();
 const loadedCommandAliases = new Set();
@@ -41,7 +42,7 @@ async function loadCommands() {
 
     try {
         const files = await fs.promises.readdir(commandsFolder);
-
+        console.log(chalk.bold.blue(`\n[ ${chalk.bold.white(`==== ${chalk.bold.yellow('Loaded Commands')} ====`)} ]`));
         await Promise.all(files.map(async (file) => {
             if (file.endsWith('.js')) {
                 try {
@@ -63,7 +64,7 @@ async function loadCommands() {
                             loadedCommandNames.add(config.name);
                             if (config.alias) loadedCommandAliases.add(config.alias);
 
-                            console.log(`Loaded command: ${config.name}`);
+                            console.log(chalk.bold.blue(`[ ${chalk.bold.yellow('Command')} ] : ${chalk.bold.white(config.name)}`));
                         }
                     } else {
                         console.error(`Invalid module structure in file: ${file}`);

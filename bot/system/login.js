@@ -18,7 +18,6 @@ async function start_facebook_login() {
                 return;
             }
 
-            console.log('===================================================');
             await loadCommands();
             await onLoadCommands({ api });
             await auto({ api });
