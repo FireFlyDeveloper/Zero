@@ -12,7 +12,7 @@ module.exports = {
     },
     onMessage: async function ({ api, event }) {
         if (event.body.toLowerCase() === "prefix") {
-            const msg = `Prefix: '${global.utils.prefix}'`;
+            const msg = `👋 Hey there! Let's chat! Just type '${global.utils.prefix}' to get started!`;
             return await api.sendMessage(msg, event.threadID, event.messageID);
         }
     }
