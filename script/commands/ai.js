@@ -32,13 +32,30 @@ module.exports = {
                 await api.sendMessage(`please input a keyword or what to ask! `, event.threadID);
                 return;
             }
-            
-            const info = await api.getUserInfo(event.senderID);
-            const name = info[event.senderID].firstName;
+
             const message = await api.sendMessage("Thinking...💭", event.threadID, event.messageID);
-            const response = await axios.get(`https://nekohime.xyz/api/ai/openai?text=${encodeURIComponent(`User name: ${name}. User prompt:${question}`)}`);
-            const messageText = response.data.result.trim();
+            const response = await axios.get(``);
+            const messageText = response.data.output.trim();
             await api.editMessage(messageText, message.messageID);
+            global.utils.onReply({
+                commandName: "ai",
+                messageID: message.messageID
+            });
+        } catch (error) {
+            console.error("Error in AI command:", error.message);
+            await api.sendMessage("An error occurred while processing your request.", event.threadID);
+        }
+    },
+    onReply: async function ({ api, event, commandName }) {
+        try {
+            const message = await api.sendMessage("Thinking...💭", event.threadID, event.messageID);
+            const response = await axios.get(`https://artificial-intelligence-saludeskimdev.replit.app/brook?prompt_user=${event.body}&user_id=${event.threadID + event.sender}`);
+            const messageText = response.data.output.trim();
+            await api.editMessage(messageText, message.messageID);
+            global.utils.onReply({
+                commandName,
+                messageID: message.messageID
+            });
         } catch (error) {
             console.error("Error in AI command:", error.message);
             await api.sendMessage("An error occurred while processing your request.", event.threadID);

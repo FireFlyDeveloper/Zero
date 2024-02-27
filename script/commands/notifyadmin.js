@@ -18,8 +18,8 @@ module.exports = {
                 const threadName = threadInfo.threadName;
                 const userInfo = await api.getUserInfo(event.author);
                 const msg = `==⚠ New Event ⚠==\nEvent: Added to a new group.\nGroup: ${threadName}\nAdded by: ${userInfo[event.author].name}`;
-                const admin = global.utils.loadConfig[0];
-                admin.admin.forEach(async (admin) => {
+                const admin = global.utils.admin;
+                admin.forEach(async (admin) => {
                     await api.sendMessage(msg, admin);
                 });
             }

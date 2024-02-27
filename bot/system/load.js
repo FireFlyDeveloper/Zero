@@ -8,7 +8,9 @@ const loadedCommandAliases = new Set();
 global.utils = {
     loadedCommands: [],
     loadFriends: new Set(),
-    loadConfig: [],
+    loadConfig: {},
+    admin: [],
+    prefix: "",
     onLoad: [],
     onEvent: [],
     onMessage: [],
@@ -30,7 +32,10 @@ global.utils = {
 async function loadConfig() {
     try {
         const config = await fs.promises.readFile('config.json', 'utf8');
-        global.utils.loadConfig.push(JSON.parse(config));
+        const parse_json = JSON.parse(config);
+        global.utils["loadConfig"] = parse_json;
+        global.utils["prefix"] = parse_json.prefix;
+        parse_json.admin.map(element => global.utils.admin.push(element));
     } catch (error) {
         console.error('Error loading config:', error.message);
     }

@@ -24,16 +24,16 @@ async function system_handler({ api, event }) {
             const args = event.body.split(' ');
             await onMessage({ api, event });
 
-            if (!args[0].startsWith(global.utils.loadConfig[0].prefix)) return;
+            if (!args[0].startsWith(global.utils.prefix)) return;
 
-            if (global.utils.loadConfig[0].friend_only &&
+            if (global.utils.loadConfig.friend_only &&
                 !Array.from(global.utils.loadFriends).some(friend => event.senderID === friend.userID)) return;
 
-            if (!global.utils.loadConfig[0].group_thread && event.senderID !== event.threadID) return;
+            if (!global.utils.loadConfig.group_thread && event.senderID !== event.threadID) return;
 
-            if (!global.utils.loadConfig[0].personal_thread && event.senderID === event.threadID) return;
+            if (!global.utils.loadConfig.personal_thread && event.senderID === event.threadID) return;
 
-            args[0] = args[0].slice(global.utils.loadConfig[0].prefix.length);
+            args[0] = args[0].slice(global.utils.prefix.length);
 
             const targetName = args[0].toLowerCase();
 
@@ -48,7 +48,7 @@ async function system_handler({ api, event }) {
                     await api.sendMessage(`The command '${commandToRun.config.name}' is on cooldown for ${Math.ceil((cooldownTime - (Date.now() - cooldowns[event.senderID])) / 1000)} seconds. Please wait.⏳`, event.threadID);
                 } else {
 
-                    if (commandToRun.config.role === 1 && global.utils.loadConfig[0].admin.includes(event.senderID)) {
+                    if (commandToRun.config.role === 1 && global.utils.admin.includes(event.senderID)) {
                         try {
                             await commandToRun.onRun({ api, event, args, commandName: commandToRun.config.name });
 
@@ -87,7 +87,7 @@ async function system_handler({ api, event }) {
                 if (commandToRun) {
                     const args = event.body.split(' ');
                     args.shift();
-                    if (commandToRun.config.role === 1 && global.utils.loadConfig[0].admin.includes(event.senderID)) {
+                    if (commandToRun.config.role === 1 && global.utils.admin.includes(event.senderID)) {
                         try {
                             return await commandToRun.onReply({ api, event, args, commandName: commandToRun.config.name, onReply });
                         } catch (error) {

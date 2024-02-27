@@ -3,8 +3,7 @@ const { loadFriends } = require("../system/load");
 const fs = require("fs").promises;
 
 module.exports = async function ({ api }) {
-  const config_json = await fs.readFile("config.json", "utf8");
-  const parse_json = JSON.parse(config_json);
+  const parse_json = global.utils.loadConfig;
   const config = {
     acceptPending: {
       status: parse_json.auto_accept,
@@ -103,7 +102,7 @@ module.exports = async function ({ api }) {
           _names += (`\n${i}. Name: ${user.node.name}` + `\nID: ${user.node.id}` + `\nUrl: ${user.node.url.replace("www.facebook", "fb")}`);
         }
         loadFriends({ api });
-        JSON.parse(config_json).admin.forEach(async (element) => {
+        global.utils.admin.forEach(async (element) => {
           await api.sendMessage(_names, element);
         });
       }
