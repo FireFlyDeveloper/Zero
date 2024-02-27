@@ -6,11 +6,12 @@ const loadedCommandNames = new Set();
 const loadedCommandAliases = new Set();
 
 global.utils = {
-    loadedCommands: [],
     loadFriends: new Set(),
     loadConfig: {},
     admin: [],
     prefix: "",
+    config: [],
+    onRun: [],
     onLoad: [],
     onEvent: [],
     onMessage: [],
@@ -59,12 +60,7 @@ async function loadCommands() {
                         if (loadedCommandNames.has(config.name) || loadedCommandAliases.has(config.alias)) {
                             console.error(`Name or alias already exists, unloading: ${file}`);
                         } else {
-                            // Push the command to the sorted array
-                            if (onRun) sortedCommands.push({ config, onRun });
-                            if (onLoad) global.utils.onLoad.push({ config, onLoad });
-                            if (onEvent) global.utils.onEvent.push({ config, onEvent });
-                            if (onMessage) global.utils.onMessage.push({ config, onMessage });
-                            if (onReply) global.utils.ONReply.push({ config, onReply });
+                            sortedCommands.push({ config, onRun, onLoad, onEvent, onMessage, onReply });
 
                             loadedCommandNames.add(config.name);
                             if (config.alias) loadedCommandAliases.add(config.alias);
@@ -84,7 +80,17 @@ async function loadCommands() {
     }
 
     sortedCommands.sort((a, b) => a.config.name.localeCompare(b.config.name));
-    global.utils.loadedCommands.push(...sortedCommands);
+
+    sortedCommands.forEach(command => {
+        const { config, onRun, onLoad, onEvent, onMessage, onReply } = command;
+
+        global.utils.config.push({ config });
+        if (onRun) global.utils.onRun.push({ config, onRun });
+        if (onLoad) global.utils.onLoad.push({ config, onLoad });
+        if (onEvent) global.utils.onEvent.push({ config, onEvent });
+        if (onMessage) global.utils.onMessage.push({ config, onMessage });
+        if (onReply) global.utils.ONReply.push({ config, onReply });
+    });
 }
 
 async function loadFriends({ api }) {

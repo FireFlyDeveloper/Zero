@@ -37,7 +37,7 @@ async function system_handler({ api, event }) {
 
             const targetName = args[0].toLowerCase();
 
-            const commandToRun = binarySearch(global.utils.loadedCommands, targetName);
+            const commandToRun = binarySearch(global.utils.onRun, targetName);
 
             if (commandToRun) {
                 if (commandToRun.suggestion) return await api.sendMessage(commandToRun.suggestion, event.threadID, event.messageID);
@@ -82,11 +82,8 @@ async function system_handler({ api, event }) {
             });
 
             if (onReply) {
-                const commandToRun = global.utils.ONReply.find(command => {
-                    return (
-                        onReply.commandName === command.config.name
-                    );
-                });
+                const commandToRun = binarySearch(global.utils.ONReply, onReply.commandName);
+                if (commandToRun.suggestion) return await api.sendMessage(commandToRun.suggestion, event.threadID, event.messageID);
 
                 const cooldownTime = commandToRun.config.countdown * 1000;
 
