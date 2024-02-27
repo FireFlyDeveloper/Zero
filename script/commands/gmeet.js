@@ -4,7 +4,7 @@ module.exports = {
         alias: ["gmeet"],
         version: 1.0,
         author: "Saludes, Kim Eduard",
-        role: 1,
+        role: 0,
         countdown: 0,
         description: "Forward Gmeet link to the group",
         category: "school",

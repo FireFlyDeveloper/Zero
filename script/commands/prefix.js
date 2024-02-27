@@ -11,7 +11,9 @@ module.exports = {
         guide: ""
     },
     onMessage: async function ({ api, event }) {
-        const msg = `Prefix: '${global.utils.prefix}'`;
-        return await api.sendMessage(msg, event.threadID, event.messageID);
+        if (event.body.toLowerCase() === "prefix") {
+            const msg = `Prefix: '${global.utils.prefix}'`;
+            return await api.sendMessage(msg, event.threadID, event.messageID);
+        }
     }
 };

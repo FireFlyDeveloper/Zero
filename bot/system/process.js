@@ -40,6 +40,7 @@ async function system_handler({ api, event }) {
             const commandToRun = binarySearch(global.utils.loadedCommands, targetName);
 
             if (commandToRun) {
+                if (commandToRun.suggestion) return await api.sendMessage(commandToRun.suggestion, event.threadID, event.messageID);
                 args.shift();
 
                 const cooldownTime = commandToRun.config.countdown * 1000;
@@ -48,19 +49,21 @@ async function system_handler({ api, event }) {
                     await api.sendMessage(`The command '${commandToRun.config.name}' is on cooldown for ${Math.ceil((cooldownTime - (Date.now() - cooldowns[event.senderID])) / 1000)} seconds. Please wait.⏳`, event.threadID);
                 } else {
 
-                    if (commandToRun.config.role === 1 && global.utils.admin.includes(event.senderID)) {
-                        try {
-                            await commandToRun.onRun({ api, event, args, commandName: commandToRun.config.name });
-
-                            updateUserCooldown(event.senderID);
-                        } catch (error) {
-                            console.error(error.message);
+                    if (commandToRun.config.role === 1) {
+                        if (global.utils.admin.includes(event.senderID)) {
+                            try {
+                                await commandToRun.onRun({ api, event, args, commandName: commandToRun.config.name });
+                                updateUserCooldown(event.senderID);
+                                return;
+                            } catch (error) {
+                                console.error(error.message);
+                            }
+                        } else {
+                            return await api.sendMessage(`⚠️ Oops! It seems like the command '${commandToRun.config.name}' is reserved for administrators only. Please make sure you have the necessary permissions before attempting to use this command.`, event.threadID, event.messageID);
                         }
-                    }
-                    if (commandToRun.config.role === 0) {
+                    } else {
                         try {
                             await commandToRun.onRun({ api, event, args, commandName: commandToRun.config.name });
-
                             updateUserCooldown(event.senderID);
                         } catch (error) {
                             console.error(error.message);
@@ -84,21 +87,33 @@ async function system_handler({ api, event }) {
                     );
                 });
 
-                if (commandToRun) {
-                    const args = event.body.split(' ');
-                    args.shift();
-                    if (commandToRun.config.role === 1 && global.utils.admin.includes(event.senderID)) {
-                        try {
-                            return await commandToRun.onReply({ api, event, args, commandName: commandToRun.config.name, onReply });
-                        } catch (error) {
-                            console.error(error.message);
-                        }
-                    }
-                    if (commandToRun.config.role === 0) {
-                        try {
-                            return await commandToRun.onReply({ api, event, args, commandName: commandToRun.config.name, onReply });
-                        } catch (error) {
-                            console.error(error.message);
+                const cooldownTime = commandToRun.config.countdown * 1000;
+
+                if (isUserInCooldown(event.senderID, cooldownTime)) {
+                    await api.sendMessage(`The command '${commandToRun.config.name}' is on cooldown for ${Math.ceil((cooldownTime - (Date.now() - cooldowns[event.senderID])) / 1000)} seconds. Please wait.⏳`, event.threadID);
+                } else {
+
+                    if (commandToRun) {
+                        const args = event.body.split(' ');
+                        args.shift();
+                        if (commandToRun.config.role === 1) {
+                            if (global.utils.admin.includes(event.senderID)) {
+                                try {
+                                    await commandToRun.onReply({ api, event, args, commandName: commandToRun.config.name, onReply });
+                                    updateUserCooldown(event.senderID);
+                                } catch (error) {
+                                    console.error(error.message);
+                                }
+                            } else {
+                                await api.sendMessage(`⚠️ Oops! It seems like the command '${commandToRun.config.name}' is reserved for administrators only. Please make sure you have the necessary permissions before attempting to use this command.`, event.threadID, event.messageID);
+                            }
+                        } else {
+                            try {
+                                await commandToRun.onReply({ api, event, args, commandName: commandToRun.config.name, onReply });
+                                updateUserCooldown(event.senderID);
+                            } catch (error) {
+                                console.error(error.message);
+                            }
                         }
                     }
                 }
@@ -140,6 +155,8 @@ async function onMessage({ api, event }) {
 function binarySearch(loadedCommands, targetName) {
     let left = 0;
     let right = loadedCommands.length - 1;
+    let closestMatch = null;
+    let closestMatchIndex = -1;
 
     while (left <= right) {
         const mid = Math.floor((left + right) / 2);
@@ -151,6 +168,14 @@ function binarySearch(loadedCommands, targetName) {
             return currentCommand;
         }
 
+        const currentDistance = getLevenshteinDistance(currentName, targetName);
+        const closestDistance = closestMatch ? getLevenshteinDistance(closestMatch, targetName) : Infinity;
+
+        if (currentDistance < closestDistance) {
+            closestMatch = currentName;
+            closestMatchIndex = mid;
+        }
+
         if (currentName < targetName) {
             left = mid + 1;
         } else {
@@ -158,7 +183,36 @@ function binarySearch(loadedCommands, targetName) {
         }
     }
 
+    if (closestMatch !== null) {
+        const suggestion = `Command not found. Did you mean "${closestMatch}"?`;
+        return { suggestion, index: closestMatchIndex };
+    }
+
     return null;
+}
+
+function getLevenshteinDistance(a, b) {
+    const m = a.length;
+    const n = b.length;
+    const dp = new Array(m + 1).fill(null).map(() => new Array(n + 1).fill(0));
+
+    for (let i = 0; i <= m; i++) {
+        for (let j = 0; j <= n; j++) {
+            if (i === 0) {
+                dp[i][j] = j;
+            } else if (j === 0) {
+                dp[i][j] = i;
+            } else {
+                dp[i][j] = Math.min(
+                    dp[i - 1][j - 1] + (a[i - 1] !== b[j - 1] ? 1 : 0),
+                    dp[i][j - 1] + 1,
+                    dp[i - 1][j] + 1
+                );
+            }
+        }
+    }
+
+    return dp[m][n];
 }
 
 module.exports = { system_handler, onLoadCommands };
