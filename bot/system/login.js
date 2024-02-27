@@ -24,10 +24,7 @@ async function start_facebook_login() {
             await loadFriends({ api });
 
             await api.setOptions({
-                listenEvents: true,
-                online: false,
-                autoMarkDelivery: false,
-                logLevel: "silent",
+                listenEvents: true
             });
 
             await api.listenMqtt(async (err, event) => {
