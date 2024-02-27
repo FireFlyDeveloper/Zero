@@ -59,7 +59,8 @@ async function system_handler({ api, event }) {
                                 console.error(error.message);
                             }
                         } else {
-                            return await api.sendMessage(`⚠️ Oops! It seems like the command '${commandToRun.config.name}' is reserved for administrators only. Please make sure you have the necessary permissions before attempting to use this command.`, event.threadID, event.messageID);
+                            await api.sendMessage(`⚠️ Oops! It seems like the command '${commandToRun.config.name}' is reserved for administrators only. Please make sure you have the necessary permissions before attempting to use this command.`, event.threadID, event.messageID);
+                            updateUserCooldown(event.senderID);
                         }
                     } else {
                         try {
@@ -106,6 +107,7 @@ async function system_handler({ api, event }) {
                                 }
                             } else {
                                 await api.sendMessage(`⚠️ Oops! It seems like the command '${commandToRun.config.name}' is reserved for administrators only. Please make sure you have the necessary permissions before attempting to use this command.`, event.threadID, event.messageID);
+                                updateUserCooldown(event.senderID);
                             }
                         } else {
                             try {
