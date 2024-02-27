@@ -49,7 +49,7 @@ module.exports = {
     onReply: async function ({ api, event, commandName }) {
         try {
             const message = await api.sendMessage("Thinking...💭", event.threadID, event.messageID);
-            const response = await axios.get(`https://artificial-intelligence-saludeskimdev.replit.app/brook?prompt_user=${event.body}&user_id=${event.threadID + event.sender}`);
+            const response = await axios.get(``);
             const messageText = response.data.output.trim();
             await api.editMessage(messageText, message.messageID);
             global.utils.onReply({
