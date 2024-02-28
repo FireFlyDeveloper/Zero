@@ -58,7 +58,7 @@ async function loadCommands() {
                         const { config, onRun, onLoad, onEvent, onMessage, onReply } = commandModule;
 
                         if (loadedCommandNames.has(config.name) || loadedCommandAliases.has(config.alias)) {
-                            console.error(`Name or alias already exists, unloading: ${file}`);
+                            console.error(chalk.bold.blue(`[ ${chalk.bold.red('Error')} ] : ${chalk.bold.white(file)} | ${chalk.bold.red(`Name or Alias already exist.`)}`));
                         } else {
                             sortedCommands.push({ config, onRun, onLoad, onEvent, onMessage, onReply });
 
@@ -68,7 +68,7 @@ async function loadCommands() {
                             console.log(chalk.bold.blue(`[ ${chalk.bold.yellow('Command')} ] : ${chalk.bold.white(config.name)}`));
                         }
                     } else {
-                        console.error(`Invalid module structure in file: ${file}`);
+                        console.error(chalk.bold.blue(`[ ${chalk.bold.red('Error')} ] : ${chalk.bold.white(file)} | ${chalk.bold.red(`Invalid module structure.`)}`));
                     }
                 } catch (error) {
                     console.error(`Error loading module from file ${file}: ${error.message}`);
