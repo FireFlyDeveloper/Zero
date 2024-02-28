@@ -41,7 +41,7 @@ Zero is an open-source Facebook Messenger chatbot designed to provide a seamless
 2. Install dependencies:
 
     ```bash
-    cd zero-chatbot
+    cd Zero
     npm install
     ```
 
