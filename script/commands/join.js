@@ -12,7 +12,7 @@ module.exports = {
     },
     onEvent: async function ({ api, event }) {
         if (event.logMessageType === "log:subscribe") {
-            const botUserID = await api.getCurrentUserID();
+            const botUserID = global.utils.botID;
 
             if (event.logMessageData.addedParticipants.some(participant => participant.userFbId === botUserID)) {
                 await api.sendMessage("Grateful for the invite! 😊\nJust a heads up, this message is automated ⚠️", event.threadID);

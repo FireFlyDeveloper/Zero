@@ -13,6 +13,14 @@ module.exports = {
         guide: ""
     },
     onRun: async function ({ api, event }) {
+        global.utils["loadedCommandNames"] = new Set();
+        global.utils["loadedCommandAliases"] = new Set();
+        global.utils["config"] = [];
+        global.utils["onRun"] = [];
+        global.utils["onLoad"] = [];
+        global.utils["onEvent"] = [];
+        global.utils["onMessage"] = [];
+        global.utils["ONReply"] = [];
         try {
             await loadCommands();
             await api.sendMessage("Commands loaded ✅", event.threadID);

@@ -14,7 +14,7 @@ module.exports = {
         if (event.logMessageType === "log:unsubscribe") {
             const leftParticipantFbId = event.logMessageData.leftParticipantFbId;
 
-            if (leftParticipantFbId === await api.getCurrentUserID()) return;
+            if (leftParticipantFbId === global.utils.botID) return;
 
             if (leftParticipantFbId !== event.author) return;
 

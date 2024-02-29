@@ -2,12 +2,12 @@ const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
 
-const loadedCommandNames = new Set();
-const loadedCommandAliases = new Set();
-
 global.utils = {
+    loadedCommandNames: new Set(),
+    loadedCommandAliases: new Set(),
     loadFriends: new Set(),
     loadConfig: {},
+    botID: "",
     admin: [],
     prefix: "",
     config: [],
@@ -57,13 +57,13 @@ async function loadCommands() {
                     if (commandModule && commandModule.config) {
                         const { config, onRun, onLoad, onEvent, onMessage, onReply } = commandModule;
 
-                        if (loadedCommandNames.has(config.name) || loadedCommandAliases.has(config.alias)) {
+                        if (global.utils.loadedCommandNames.has(config.name) || global.utils.loadedCommandAliases.has(config.alias)) {
                             console.error(chalk.bold.blue(`[ ${chalk.bold.red('Error')} ] : ${chalk.bold.white(file)} | ${chalk.bold.red(`Name or Alias already exist.`)}`));
                         } else {
                             sortedCommands.push({ config, onRun, onLoad, onEvent, onMessage, onReply });
 
-                            loadedCommandNames.add(config.name);
-                            if (config.alias) loadedCommandAliases.add(config.alias);
+                            global.utils.loadedCommandNames.add(config.name);
+                            if (config.alias) global.utils.loadedCommandAliases.add(config.alias);
 
                             console.log(chalk.bold.blue(`[ ${chalk.bold.yellow('Command')} ] : ${chalk.bold.white(config.name)}`));
                         }
@@ -95,6 +95,8 @@ async function loadCommands() {
 
 async function loadFriends({ api }) {
     try {
+        const botID = await api.getCurrentUserID();
+        global.utils["botID"] = botID;
         const friends = await api.getFriendsList();
         friends.forEach(friend => global.utils.loadFriends.add(friend));
     } catch (error) {
