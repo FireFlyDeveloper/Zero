@@ -14,15 +14,19 @@ async function updateUserCooldown(userId, commandName) {
     cooldowns[userId + commandName] = { time: Date.now(), commandName };
 }
 
+async function configCheck({ event }) {
+    if (global.utils.loadConfig.friend_only &&
+        !Array.from(global.utils.loadFriends).some(friend => event.senderID === friend.userID)) return false;
+
+    if (!global.utils.loadConfig.group_thread && event.senderID !== event.threadID) return false;
+
+    if (!global.utils.loadConfig.personal_thread && event.senderID === event.threadID) return false;
+
+    return true;
+}
+
 async function system_handler({ api, event }) {
     if (event.type) {
-
-        if (global.utils.loadConfig.friend_only &&
-            !Array.from(global.utils.loadFriends).some(friend => event.senderID === friend.userID)) return;
-
-        if (!global.utils.loadConfig.group_thread && event.senderID !== event.threadID) return;
-
-        if (!global.utils.loadConfig.personal_thread && event.senderID === event.threadID) return;
 
         switch (event.type) {
             case "event":
@@ -30,11 +34,15 @@ async function system_handler({ api, event }) {
                 break;
 
             case "message":
+                if (! await configCheck({ event })) return;
+                
                 onMessage({ api, event });
                 onRun({ api, event });
                 break;
 
             case "message_reply":
+                if (! await configCheck({ event })) return;
+
                 onReply({ api, event });
                 break;
         }
