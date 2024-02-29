@@ -49,6 +49,14 @@ async function loadCommands() {
     try {
         const files = await fs.promises.readdir(commandsFolder);
         console.log(chalk.bold.blue(`\n[ ${chalk.bold.white(`==== ${chalk.bold.yellow('Loaded Commands')} ====`)} ]`));
+
+        files.forEach(file => {
+            if (file.endsWith('.js')) {
+                const filePath = path.join(commandsFolder, file);
+                delete require.cache[require.resolve(filePath)];
+            }
+        });
+
         await Promise.all(files.map(async (file) => {
             if (file.endsWith('.js')) {
                 try {
