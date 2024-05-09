@@ -13,14 +13,14 @@ module.exports = {
         guide: ""
     },
     onMessage: async function ({ api, event }) {
-        const tiktokUrlRegex = /https:\/\/vt\.tiktok\.com\/[a-zA-Z0-9]{8,}\//;
+        const tiktokUrlRegex = /(?:http(?:s)?:\/\/)?(?:www\.)?tiktok\.com\/@[^\/\?\s]+\/video\/[^\/\?\s]+/gi;
         const match = event.body.match(tiktokUrlRegex);
 
         if (match) {
             const tiktokLink = match[0];
             try {
                 const message = await api.sendMessage('Tiktok♪ url detected ⚠', event.threadID, event.messageID);
-                const link = await axios.get(`https://tiktokapi-2z4a.onrender.com/downloadTiktok?url=${tiktokLink}`);
+                const link = await axios.get(`https://tiktok-api.vercel.app/downloadTiktok?url=${tiktokLink}`);
                 if (link.data.images.length !== 0) return await api.editMessage('Unsupported tiktok url 😢', message.messageID);
                 await api.editMessage('Downloading...⬇', message.messageID);
                 const buffer = await downloadFile(link);
