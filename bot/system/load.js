@@ -21,9 +21,9 @@ global.utils = {
         if (!data.messageID) return console.error('messageID are missing.');
         global.utils.onReplyValue.push(data);
         setTimeout(() => {
-            const index = global.utils.onReplyValue.indexOf(data);
+            const index = this.onReplyValue.indexOf(data);
             if (index !== -1) {
-                global.utils.onReplyValue.splice(index, 1);
+                this.onReplyValue.splice(index, 1);
             }
         }, 15 * 60 * 1000);
     },
