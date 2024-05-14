@@ -13,16 +13,16 @@ module.exports = async function ({ api }) {
     },
     autoRestart: {
       status: parse_json.autoRestart,
-      note: 'Auto restart every 12am. (Recommended)',
+      note: 'Auto restart every 2hrs. (Recommended)',
       author: 'Saludes, Kim Eduard'
     }
   };
 
 
   function autoRestart() {
-    cron.schedule('0 0 * * *', async () => {
+    cron.schedule('0 */2 * * *', async () => {
       console.log('Executing Auto Restart...');
-      await fs.writeFile('appstate.json', JSON.stringify(api.getAppState(), null,'\t'));
+      await fs.writeFile('appstate.json', JSON.stringify(api.getAppState(), null, '\t'));
       process.exit(2);
     }, {
       scheduled: true,
@@ -108,7 +108,7 @@ module.exports = async function ({ api }) {
       }
     });
   }
-  
+
   if (config.autoRestart.status) autoRestart();
   if (config.acceptPending.status) acceptPending(config.acceptPending);
 }
