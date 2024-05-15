@@ -34,10 +34,23 @@ module.exports = {
                 });
                 await api.editMessage('Downloading...⬇', message.messageID);
                 const buffer = await downloadFile(link);
-                await api.sendMessage({
-                    body: `Author: ${link.data.data.author.nickname}\nTitle: ${link.data.data.title}`,
-                    attachment: buffer,
-                }, event.threadID, event.messageID);
+                if (buffer.images) {
+                    await api.sendMessage({
+                        body: `Author: ${link.data.data.author.nickname}\nTitle: ${link.data.data.title}`,
+                        attachment: buffer.images,
+                    }, event.threadID, event.messageID);
+                    if (buffer.music) {
+                        await api.sendMessage({
+                            body: `Author: ${link.data.data.author.nickname}\nTitle: ${link.data.data.title}`,
+                            attachment: buffer.music,
+                        }, event.threadID, event.messageID);
+                    }
+                } else {
+                    await api.sendMessage({
+                        body: `Author: ${link.data.data.author.nickname}\nTitle: ${link.data.data.title}`,
+                        attachment: buffer.video,
+                    }, event.threadID, event.messageID);
+                }
                 await api.editMessage('Downloaded ✅', message.messageID);
             } catch (error) {
                 console.error(error);
@@ -56,12 +69,20 @@ async function downloadFile(link) {
             image.data.path = `${Date.now()}.png`;
             return image.data;
         }));
-        return images;
+        if (link.data.data.music) {
+            const music = await axios({
+                method: 'get',
+                url: link.data.data.music,
+                responseType: 'stream',
+            });
+            return { images, music: music.data };
+        }
+        return { images };
     }
     const downloadFile = await axios({
         method: 'get',
         url: link.data.data.hdplay,
         responseType: 'stream',
     });
-    return downloadFile.data;
+    return { video: downloadFile.data };
 }
