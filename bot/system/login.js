@@ -31,8 +31,7 @@ async function start_facebook_login() {
 
             await api.listenMqtt(async (err, event) => {
                 if (err) {
-                    console.error(err);
-                    return;
+                    process.exit(2);
                 }
 
                 try {
